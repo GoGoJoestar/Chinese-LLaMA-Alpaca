@@ -62,13 +62,13 @@ parser.add_argument(
     action='store_true',
     help="Use vLLM as back-end LLM service.")
 parser.add_argument(
-    "--post_host", 
-    type=str, 
+    "--post_host",
+    type=str,
     default="localhost",
     help="Host of vLLM service.")
 parser.add_argument(
-    "--post_port", 
-    type=int, 
+    "--post_port",
+    type=int,
     default=8000,
     help="Port of vLLM service.")
 args = parser.parse_args()
@@ -106,7 +106,7 @@ def setup():
 
         if args.tokenizer_path is None:
             args.tokenizer_path = args.base_model
-        
+
         print("Start launch vllm server.")
         subprocess.call(
             f"python -m vllm.entrypoints.api_server \
@@ -277,7 +277,6 @@ def post_http_request(prompt: str,
     pload = {
         "prompt": prompt,
         "n": n,
-        "use_beam_search": False,
         "top_p": 1 if use_beam_search else top_p,
         "top_k": -1 if use_beam_search else top_k,
         "temperature": 0 if use_beam_search else temperature,
@@ -339,7 +338,7 @@ def predict(
 
         api_url = f"http://{args.post_host}:{args.post_port}/generate"
 
-        
+
         response = post_http_request(prompt, api_url, **generate_params, stream=True)
 
         for h in get_streaming_response(response):
